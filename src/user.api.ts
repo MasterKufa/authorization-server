@@ -3,7 +3,6 @@ import { ACTIONS } from "./actions";
 import { Socket } from "socket.io";
 import {
   ApiHandlers,
-  ApiHandler,
   RegisterPayload,
   SocketResponse,
   VerifyPayload,
