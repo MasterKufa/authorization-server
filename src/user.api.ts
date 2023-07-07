@@ -6,6 +6,7 @@ import {
   RegisterPayload,
   SocketResponse,
   VerifyPayload,
+  Request,
 } from "./types";
 
 class Api {
@@ -21,28 +22,31 @@ class Api {
 }
 
 export const userApi = new Api({
-  [ACTIONS.AUTH]: async (socket: Socket, payload: RegisterPayload) => {
+  [ACTIONS.AUTH]: async (socket: Socket, payload: Request<RegisterPayload>) => {
     const token = await userService.auth(payload);
     const successResponse: SocketResponse<string> = {
-      id: payload.id,
+      requestId: payload.requestId,
       payload: token,
     };
 
     socket.emit(ACTIONS.AUTH, successResponse);
   },
-  [ACTIONS.REGISTER]: async (socket: Socket, payload: RegisterPayload) => {
+  [ACTIONS.REGISTER]: async (
+    socket: Socket,
+    payload: Request<RegisterPayload>,
+  ) => {
     await userService.create(payload);
     const successResponse: SocketResponse = {
-      id: payload.id,
+      requestId: payload.requestId,
       payload: "success",
     };
 
     socket.emit(ACTIONS.REGISTER, successResponse);
   },
-  [ACTIONS.VERIFY]: (socket: Socket, payload: VerifyPayload) => {
+  [ACTIONS.VERIFY]: (socket: Socket, payload: Request<VerifyPayload>) => {
     userService.verify(payload.token);
     const successResponse: SocketResponse = {
-      id: payload.id,
+      requestId: payload.requestId,
       payload: "success",
     };
 
