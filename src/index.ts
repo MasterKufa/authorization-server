@@ -1,8 +1,9 @@
-import { Server, Socket } from "socket.io";
+import { Socket } from "socket.io";
 import { ACTIONS } from "./actions";
 import { userApi } from "./user.api";
+import { createServer } from "@master_kufa/server-tools";
 
-const io = new Server(3000);
+const io = createServer();
 
 io.on("connection", (socket: Socket) => {
   socket.on(ACTIONS.AUTH, userApi.handle.bind(userApi, ACTIONS.AUTH, socket));

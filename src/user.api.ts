@@ -1,25 +1,8 @@
 import { userService } from "./user.service";
 import { ACTIONS } from "./actions";
 import { Socket } from "socket.io";
-import {
-  ApiHandlers,
-  RegisterPayload,
-  SocketResponse,
-  VerifyPayload,
-  Request,
-} from "./types";
-
-class Api {
-  constructor(private handlers: ApiHandlers) {}
-
-  async handle(action: ACTIONS, socket: Socket, payload: { id?: string }) {
-    try {
-      await this.handlers[action](socket, payload);
-    } catch ({ message }) {
-      payload.id && socket.emit(action, { id: payload.id, error: message });
-    }
-  }
-}
+import { RegisterPayload, VerifyPayload } from "./types";
+import { Request, SocketResponse, Api } from "@master_kufa/server-tools";
 
 export const userApi = new Api({
   [ACTIONS.AUTH]: async (socket: Socket, payload: Request<RegisterPayload>) => {
@@ -45,6 +28,7 @@ export const userApi = new Api({
   },
   [ACTIONS.VERIFY]: (socket: Socket, payload: Request<VerifyPayload>) => {
     userService.verify(payload.token);
+
     const successResponse: SocketResponse = {
       requestId: payload.requestId,
       payload: "success",

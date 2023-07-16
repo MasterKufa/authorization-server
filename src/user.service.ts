@@ -2,6 +2,7 @@ import { AuthPayload, RegisterPayload } from "./types";
 import { createHash } from "crypto";
 import * as jwt from "jsonwebtoken";
 import { prisma } from "../prisma";
+import { SocketErrors } from "@master_kufa/server-tools";
 
 class UserService {
   buildPasswordHash(password: string) {
@@ -33,7 +34,11 @@ class UserService {
   }
 
   verify(token: string) {
-    jwt.verify(token, process.env.JWT_SECRET);
+    try {
+      jwt.verify(token, process.env.JWT_SECRET);
+    } catch (e) {
+      throw new Error(SocketErrors.UNAUTHORIZED);
+    }
   }
 }
 
