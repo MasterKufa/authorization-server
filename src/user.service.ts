@@ -30,7 +30,7 @@ class UserService {
 
     if (!user) throw new Error("User does not exist");
 
-    return jwt.sign({ login: user.login }, process.env.JWT_SECRET);
+    return jwt.sign({ login: user.login, id: user.id }, process.env.JWT_SECRET);
   }
 
   verify(token: string) {
