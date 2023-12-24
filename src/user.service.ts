@@ -38,6 +38,8 @@ class UserService {
   verify(token: string) {
     try {
       jwt.verify(token, process.env.JWT_SECRET);
+
+      return token;
     } catch (e) {
       throw new Error(SocketErrors.UNAUTHORIZED);
     }
