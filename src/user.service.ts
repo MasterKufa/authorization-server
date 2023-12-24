@@ -21,6 +21,8 @@ class UserService {
         passwordHash: this.buildPasswordHash(payload.password),
       },
     });
+
+    return payload.login;
   }
 
   async auth(payload: AuthPayload) {
