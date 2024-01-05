@@ -32,6 +32,9 @@ class UserService {
 
     if (!user) throw new Error("User does not exist");
 
+    if (this.buildPasswordHash(payload.password) !== user.passwordHash)
+      throw new Error("Wrong password");
+
     return jwt.sign({ login: user.login, id: user.id }, process.env.JWT_SECRET);
   }
 
